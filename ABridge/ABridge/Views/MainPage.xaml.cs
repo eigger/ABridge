@@ -29,18 +29,18 @@ namespace ABridge.Views
         }
         private void _Open_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog(); 
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             // 처음 보여줄 폴더 설정(안해도 됨) 
-            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory; 
-            dialog.IsFolderPicker = true; 
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok) 
-            { 
+            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
                 _OpenText.Text = dialog.FileName;
                 Photos.Clear();
                 DirFileSearch(_OpenText.Text, "");
             }
 
-    
+
         }
         private FileInfo[] GetFilesFromFolder(string path)
         {

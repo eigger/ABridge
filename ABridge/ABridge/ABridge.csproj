@@ -6,14 +6,14 @@
     <UseWPF>true</UseWPF>
     <StartupObject></StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0660" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
-    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ABridge.Core\ABridge.Core.csproj" />
+    <PackageReference Include="WindowsAPICodePack" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Strings\Resources.Designer.cs">
@@ -37,7 +37,9 @@
     <Folder Include="Images\Icons\" />
   </ItemGroup>
   <ItemGroup>
-    <ReferencePath Include="D:\SynologyDrive\Projects\CHS\AnneBridge\Source\ABridge\ABridge.Core\bin\Debug\netstandard2.0\ABridge.Core.dll" />
+    <ProjectReference Include="..\ABridge.Core\ABridge.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <ReferencePath Include="C:\Users\eigger\.nuget\packages\microsoft.windowsdesktop.app.ref\3.0.0\ref\netcoreapp3.0\Accessibility.dll" />
     <ReferencePath Include="C:\Users\eigger\.nuget\packages\controlzex\4.2.0\lib\netcoreapp3.0\ControlzEx.dll" />
     <ReferencePath Include="C:\Users\eigger\.nuget\packages\mvvmlightlibsstd10\5.4.1.1\lib\netstandard1.0\GalaSoft.MvvmLight.dll" />

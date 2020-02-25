@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABridge", "ABridge\ABridge.csproj", "{777C5882-8750-4F04-8DCD-631682262A95}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BAB964C3-245E-44D1-997A-9D9FDB0F2CC6} = {BAB964C3-245E-44D1-997A-9D9FDB0F2CC6}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABridge.Core", "ABridge.Core\ABridge.Core.csproj", "{BAB964C3-245E-44D1-997A-9D9FDB0F2CC6}"
 EndProject
