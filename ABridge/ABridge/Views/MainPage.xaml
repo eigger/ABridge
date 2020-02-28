@@ -188,9 +188,16 @@
             </Grid>
             <Grid Grid.Row="2" >
                 <TreeView 
-                Margin="0,0,6,0"
-                x:Name="_TreeView" SelectedItemChanged="_TreeView_SelectedItemChanged" MouseDoubleClick="_TreeView_MouseDoubleClick"
-                />
+                    Margin="0,0,6,0"
+                    x:Name="_TreeView" 
+                    SelectedItemChanged="_TreeView_SelectedItemChanged" 
+                    MouseDoubleClick="_TreeView_MouseDoubleClick">
+                    <TreeView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="DeleteTag" />
+                        </ContextMenu>
+                    </TreeView.ContextMenu>
+                </TreeView>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">

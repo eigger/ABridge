@@ -51,6 +51,16 @@ namespace ABridge.Views
             _fileService.Save<List<String>>(AppDomain.CurrentDomain.BaseDirectory, "Config.json", _tagList);
         }
 
+        private void DeleteTag(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)_TreeView.SelectedItem;
+            if (DeleteTag((String)item.Tag) == true)
+            {
+                _tagList.Remove((String)item.Tag);
+                _fileService.Save<List<String>>(AppDomain.CurrentDomain.BaseDirectory, "Config.json", _tagList);
+            }
+        }
+
 
         private void GetSubDirectories(TreeViewItem itemParent)
         {
@@ -139,6 +149,19 @@ namespace ABridge.Views
             item.Expanded += new RoutedEventHandler(item_Expanded);
             _TreeView.Items.Add(item);
             return true;
+        }
+
+        private bool DeleteTag(String tag)
+        {
+            foreach (TreeViewItem tv in _TreeView.Items)
+            {
+                if ((String)tv.Tag == tag)
+                {
+                    _TreeView.Items.Remove(tv.Tag);
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void OnPhotoClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
