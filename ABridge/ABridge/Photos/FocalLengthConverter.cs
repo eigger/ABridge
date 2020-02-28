@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Converts a focal length from a decimal into a human-preferred string (e.g. 85 becomes 85mm)

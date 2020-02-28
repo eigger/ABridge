@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Converts an exposure time from a decimal (e.g. 0.0125) into a string (e.g. 1/80)

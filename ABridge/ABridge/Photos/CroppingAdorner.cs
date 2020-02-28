@@ -7,7 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     // Adorner based on the ResizingAdorner in the SDK sample
     public class CroppingAdorner : Adorner

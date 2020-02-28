@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Converts an x,y size pair into a string value (e.g. 1600x1200)

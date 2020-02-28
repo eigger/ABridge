@@ -8,7 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:strings="clr-namespace:ABridge.Strings"
     xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:local="clr-namespace:PhotoViewerDemo"
+    xmlns:local="clr-namespace:ABridge.Photos"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800" Loaded="Page_Loaded">
     <Page.Resources>
@@ -28,11 +28,15 @@
                 <!-- Image Template -->
                 <Border Padding="4" Background="White" BorderBrush="#22000000" BorderThickness="1">
                     <StackPanel Orientation="Vertical">
-                        <Image Source="{Binding Image}" />
+                        <Image Source="{Binding Image}">
+                            <Image.ToolTip>
+                                <Label Content="{Binding Source}"></Label>
+                            </Image.ToolTip>
+                        </Image>
                         <!--Image.thumbnail-->
-                        <Label Content="{Binding Metadata.DateImageTaken}">
+                        <Label Content="{Binding Metadata.GetDate}">
                             <Label.ToolTip>
-                                Only JPeg images with a stored thumbnail will display a thumbnail during preview.
+                                <Label Content="{Binding Source}"></Label>
                             </Label.ToolTip>
                         </Label>
                     </StackPanel>
@@ -143,135 +147,24 @@
         <local:FocalLengthConverter x:Key="FocalLengthConverterReference" />
         <local:LensApertureConverter x:Key="LensApertureConverterReference" />
         <local:PhotoSizeConverter x:Key="PhotoSizeConverterReference" />
-
-        <BitmapImage x:Key="Icon_FolderOpen"   UriSource="pack://application:,,,/Images/Icons/folder_open.ico"   />
-        <BitmapImage x:Key="Icon_FolderClosed" UriSource="pack://application:,,,/Images/Icons/folder_closed.ico" />
-
-        <Style x:Key="IconImageStyleSmall" TargetType="Image">
-            <Setter Property="MaxWidth" Value="16"/>
-            <Setter Property="MaxHeight" Value="16"/>
-            <Setter Property="Margin" Value="1"/>
-        </Style>
         
-        <DataTemplate x:Key="ItemTemplate">
-            <Grid Height="28">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Grid.Column="0"
-                    Text="{Binding Symbol}"
-                    Style="{StaticResource MediumIconStyle}"
-                    Margin="{StaticResource XSmallLeftMargin}"
-                    AutomationProperties.Name="List item icon" />
-                <StackPanel
-                    Grid.Column="1"
-                    Margin="{StaticResource SmallLeftMargin}"
-                    VerticalAlignment="Center">
-                    <TextBlock Style="{StaticResource ListTitleStyle}" Text="{Binding Company}" />
-                    <TextBlock Style="{StaticResource ListSubTitleStyle}" Text="{Binding Status}" />
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DetailTemplate">
-            <ScrollViewer
-                Name="ForegroundElement"
-                HorizontalAlignment="Stretch">
-                <StackPanel HorizontalAlignment="Left" Margin="{StaticResource MediumLeftTopRightBottomMargin}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                        <TextBlock
-                            Text="{Binding Symbol}"
-                            Style="{StaticResource BigIconStyle}"
-                            AutomationProperties.Name="Detail icon" />
-                        <TextBlock
-                            Margin="{StaticResource SmallLeftMargin}"
-                            VerticalAlignment="Center"
-                            Text="{Binding Company, Mode=OneWay}"
-                            Style="{StaticResource PageTitleStyle}" />
-                    </StackPanel>
-                    <StackPanel Margin="{StaticResource SmallTopMargin}">
-                        <TextBlock
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Status" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding MasterMenuItem.Status, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Order date" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding OrderDate, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Company" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding Company, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Ship to" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding ShipTo, Mode=OneWay}" />
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Order total" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="{Binding OrderTotal, Mode=OneWay}" />
-
-                        <TextBlock
-                            Margin="{StaticResource MediumTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Note 1" />
-                        <TextBlock
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;"
-                            AutomationProperties.Name="Detail note 1"
-                            AutomationProperties.HelpText="{Binding Text, RelativeSource={RelativeSource Self}}" />
-
-                        <TextBlock
-                            Margin="{StaticResource SmallTopMargin}"
-                            Style="{StaticResource SubtitleTextStyle}"
-                            Text="Note 2" />
-                        <TextBlock
-                            Margin="{StaticResource MediumBottomMargin}"
-                            Style="{StaticResource BodyTextStyle}"
-                            Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;"
-                            AutomationProperties.Name="Detail note 2"
-                            AutomationProperties.HelpText="{Binding Text, RelativeSource={RelativeSource Self}}" />
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
-        </DataTemplate>
-        <DataTemplate x:Key="PhotosTemplate">
-
-
-        </DataTemplate>
     </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="180" MaxWidth="300" Width="*" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*" />
-                <RowDefinition Height="30*" />
-                <RowDefinition Height="200*" />
-                <RowDefinition Height="100*"/>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="200*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="185" MaxWidth="300" Width="*" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
@@ -282,32 +175,43 @@
             </Grid>
             <Grid Grid.Row="1" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="185" MaxWidth="300" Width="*" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
 
-                <TextBox x:Name="_SearchText" Controls:TextBoxHelper.TextButton="True" Grid.Column="0" Margin="3" HorizontalAlignment="Stretch"/>
+                <TextBox x:Name="_EditText" Controls:TextBoxHelper.TextButton="True" Grid.Column="0" Margin="3" HorizontalAlignment="Stretch"/>
                 <Button x:Name="_Search" Content="Search" Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Click="_Search_Click"/>
-                
+                <Button x:Name="_TagAdd" Content="Add" Grid.Column="2" Margin="3" HorizontalAlignment="Stretch" Click="_TagAdd_Click"/>
             </Grid>
-            <TreeView 
-                Grid.Row="2" Margin="0,0,6,0"
+            <Grid Grid.Row="2" >
+                <TreeView 
+                Margin="0,0,6,0"
                 x:Name="_TreeView" SelectedItemChanged="_TreeView_SelectedItemChanged" MouseDoubleClick="_TreeView_MouseDoubleClick"
                 />
-            <ListView
-                Grid.Row="3"
-                ItemsSource="{Binding SampleItems}"
-                ItemTemplate="{StaticResource ItemTemplate}"
-                SelectedItem="{Binding Selected, Mode=TwoWay}" Margin="0,0,6,0" />
+            </Grid>
         </Grid>
-        <!--<ContentControl
-            Grid.Column="1"
-            Content="{Binding Selected}"
-            ContentTemplate="{StaticResource DetailTemplate}" />-->
-        <GroupBox Grid.Column="1" DataContext="{Binding Source={StaticResource Photos}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <ListBox
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="200*"/>
+            </Grid.RowDefinitions>
+            <Slider Grid.Row="0" 
+                    Name="ZoomSlider"
+                        Margin="10,0,0,0"
+                        Orientation="Horizontal"
+                        Minimum="80"
+                        Maximum="320"
+                        Value="160"
+                        TickFrequency="80"
+                        TickPlacement="BottomRight"
+                        SmallChange="5"
+                        LargeChange="20" />
+            <GroupBox Grid.Row="1" DataContext="{Binding Source={StaticResource Photos}}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ListBox
                     IsSynchronizedWithCurrentItem="True"
                     Name="PhotosListBox"
                     Style="{StaticResource PhotoListBoxStyle}"
@@ -316,13 +220,18 @@
                     ItemsSource="{Binding}"
                     SelectedIndex="0"
                     MouseDoubleClick="OnPhotoClick">
-                    <ListBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Edit" Click="EditPhoto" />
-                        </ContextMenu>
-                    </ListBox.ContextMenu>
-                </ListBox>
-            </ScrollViewer>
-        </GroupBox>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Edit" Click="EditPhoto" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </ScrollViewer>
+            </GroupBox>
+        </Grid>
+        <!--<ContentControl
+            Grid.Column="1"
+            Content="{Binding Selected}"
+            ContentTemplate="{StaticResource DetailTemplate}" />-->
     </Grid>
 </Page>

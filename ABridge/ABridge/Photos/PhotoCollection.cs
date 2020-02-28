@@ -1,17 +1,20 @@
 // // Copyright (c) Microsoft. All rights reserved.
 // // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     This class represents a collection of photos in a directory.
     /// </summary>
     public class PhotoCollection : ObservableCollection<Photo>
     {
+        private static int MAX_LIST_COUNT = 200;
         private DirectoryInfo _directory;
 
         public PhotoCollection()
@@ -25,40 +28,73 @@ namespace PhotoViewerDemo
         public PhotoCollection(DirectoryInfo directory)
         {
             _directory = directory;
-            Update();
         }
 
-        public string Path
+
+        public bool AddPhoto(Photo photo)
         {
-            set
-            {
-                _directory = new DirectoryInfo(value);
-                Update();
-            }
-            get { return _directory.FullName; }
+            if (Count > MAX_LIST_COUNT) return false;
+            Add(photo);
+            return true;
+        }
+        private FileInfo[] GetImageFilesFromFolder(string path)
+        {
+            string[] extensions = new[] { ".jpg", ".gif", ".png" };
+            DirectoryInfo dInfo = new DirectoryInfo(path);
+
+            FileInfo[] files = dInfo.GetFiles()
+              .Where(f => extensions.Contains(f.Extension.ToLower()))
+              .ToArray();
+            return files;
         }
 
-        public DirectoryInfo Directory
+        public void UpdatePhotosWithTag(string path, string tag = "")
         {
-            set
-            {
-                _directory = value;
-                Update();
-            }
-            get { return _directory; }
-        }
-
-        private void Update()
-        {
-            Clear();
             try
             {
-                foreach (var f in _directory.GetFiles("*.jpg"))
-                    Add(new Photo(f.FullName));
+                FileInfo[] files = GetImageFilesFromFolder(path);
+                foreach (FileInfo _file in files)
+                {
+                    Photo photo = new Photo(_file.FullName);
+                    try
+                    {
+                        if (tag.Length == 0)
+                        {
+                            if (AddPhoto(photo) == false) return;
+                        }
+                        else
+                        {
+                            string[] tags = photo.Metadata.GetTags();
+                            if (tags != null)
+                            {
+                                foreach (string _tag in tags)
+                                {
+                                    if (tag == _tag)
+                                    {
+                                        AddPhoto(photo);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+                string[] directoreis = Directory.GetDirectories(path);
+                if (directoreis.Length > 0)
+                {
+                    foreach (string _directory in directoreis)
+                    {
+                        UpdatePhotosWithTag(_directory, tag);
+                    }
+                }
             }
-            catch (DirectoryNotFoundException)
+            catch (Exception ex)
             {
-                MessageBox.Show("No Such Directory");
+                Console.WriteLine(ex);
             }
         }
 

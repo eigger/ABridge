@@ -5,15 +5,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using PhotoViewerDemo;
+using ABridge.Photos;
 using Microsoft.WindowsAPICodePack.Dialogs;
-
+using ABridge.Core.Services;
 
 namespace ABridge.Views
 {
     public partial class MainPage : Page
     {
-        private static int MAX_LIST_COUNT = 200;
+        private FileService _fileService = new FileService();
+        private List<String> _tagList;
         public PhotoCollection Photos;
         public MainPage()
         {
@@ -25,94 +26,30 @@ namespace ABridge.Views
         {
             if (_OpenText.Text.Length == 0) return;
             Photos.Clear();
-            DirFileSearch(_OpenText.Text, _SearchText.Text);
+            Photos.UpdatePhotosWithTag(_OpenText.Text, _EditText.Text);
         }
         private void _Open_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            // 처음 보여줄 폴더 설정(안해도 됨) 
             dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             dialog.IsFolderPicker = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 _OpenText.Text = dialog.FileName;
                 Photos.Clear();
-                DirFileSearch(_OpenText.Text, "");
+                Photos.UpdatePhotosWithTag(_OpenText.Text, "");
             }
 
 
         }
-        private FileInfo[] GetFilesFromFolder(string path)
+        private void _TagAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string[] extensions = new[] { ".jpg", ".gif", ".png" };
-            DirectoryInfo dInfo = new DirectoryInfo(path);
-
-            FileInfo[] files = dInfo.GetFiles()
-              .Where(f => extensions.Contains(f.Extension.ToLower()))
-              .ToArray();
-            return files;
+            String text = _EditText.Text;
+            if (text.Length == 0) return;
+            if (AddTag(text) == false) return;
+            _tagList.Add(text);
+            _fileService.Save<List<String>>(AppDomain.CurrentDomain.BaseDirectory, "Config.json", _tagList);
         }
-
-        void DirFileSearch(string path, string tag = "")
-        {
-            try
-            {
-                string[] dirs = Directory.GetDirectories(path);
-                FileInfo[] files = GetFilesFromFolder(path);
-
-                foreach (FileInfo file in files)
-                {
-                    Photo photo = new Photo(file.FullName);
-                    try
-                    {
-                        if (photo.Metadata.tags == null)
-                        {
-                            if (tag.Length == 0)
-                            {
-                                if (Photos.Count > MAX_LIST_COUNT) break;
-                                Photos.Add(photo);
-                            }
-                        }
-                        else
-                        {
-                            foreach (string t in photo.Metadata.tags)
-                            {
-                                AddTag(t);
-                            }
-                            foreach (string t in photo.Metadata.tags)
-                            {
-                                if (tag.Length > 0 && tag == t)
-                                {
-                                    if (Photos.Count > MAX_LIST_COUNT) break;
-                                    Photos.Add(photo);
-                                    break;
-                                }
-                            }
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-
-                                                           
-                }
-                if (Photos.Count > MAX_LIST_COUNT) return;
-                if (dirs.Length > 0)                 
-                {                     
-                    foreach(string dir in dirs)                     
-                    {                         
-                        DirFileSearch(dir, tag);                     
-                    }                 
-                }                             
-            }             
-            catch(Exception ex)             
-            {                 
-                Console.WriteLine(ex);                 
-            }           
-        }
-
 
 
         private void GetSubDirectories(TreeViewItem itemParent)
@@ -137,7 +74,7 @@ namespace ABridge.Views
 
             }
 
-            catch (Exception except)
+            catch (Exception ex)
             {
 
 
@@ -160,7 +97,12 @@ namespace ABridge.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-
+            _tagList = _fileService.Read<List<String>>(AppDomain.CurrentDomain.BaseDirectory, "Config.json");
+            if (_tagList == null) _tagList = new List<string>();
+            foreach(String _tag in _tagList)
+            {
+                AddTag(_tag);
+            }
         }
 
         private void AddDrive()
@@ -177,7 +119,7 @@ namespace ABridge.Views
                     _TreeView.Items.Add(item);
                     GetSubDirectories(item);
                 }
-                catch (Exception except)
+                catch (Exception ex)
                 {
 
                 }
@@ -185,28 +127,32 @@ namespace ABridge.Views
             }
         }
 
-        private void AddTag(String tag)
+        private bool AddTag(String tag)
         {
             foreach(TreeViewItem tv in _TreeView.Items)
             {
-                if ((String)tv.Tag == tag) return;
+                if ((String)tv.Tag == tag) return false;
             }
             TreeViewItem item = new TreeViewItem();
             item.Header = tag;
             item.Tag = tag;
             item.Expanded += new RoutedEventHandler(item_Expanded);
             _TreeView.Items.Add(item);
+            return true;
         }
 
         private void OnPhotoClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var pvWindow = new PhotoViewer { SelectedPhoto = (Photo)PhotosListBox.SelectedItem };
-            pvWindow.Show();
+            Photo photo = (Photo)PhotosListBox.SelectedItem;
+            System.Diagnostics.Process.Start("explorer.exe", photo.Source);
         }
 
         private void EditPhoto(object sender, RoutedEventArgs e)
         {
             var pvWindow = new PhotoViewer { SelectedPhoto = (Photo)PhotosListBox.SelectedItem };
+            var location = PhotosListBox.PointToScreen(new Point(0, 0));
+            pvWindow.Left = location.X;
+            pvWindow.Top = location.Y;
             pvWindow.Show();
         }
 
@@ -214,14 +160,14 @@ namespace ABridge.Views
         {
             Photos.Clear();
             TreeViewItem item = (TreeViewItem)_TreeView.SelectedItem;
-            DirFileSearch(_OpenText.Text, (String)item.Tag);
+            Photos.UpdatePhotosWithTag(_OpenText.Text, (String)item.Tag);
         }
 
         private void _TreeView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Photos.Clear();
             TreeViewItem item = (TreeViewItem)_TreeView.SelectedItem;
-            DirFileSearch(_OpenText.Text, (String)item.Tag);
+            Photos.UpdatePhotosWithTag(_OpenText.Text, (String)item.Tag);
         }
     }
 }

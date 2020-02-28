@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Converts a lens aperture from a decimal into a human-preferred string (e.g. 1.8 becomes F1.8)

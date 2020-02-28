@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Converts an exposure mode from an enum into a human-readable string (e.g. AperturePriority

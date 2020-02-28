@@ -1,9 +1,9 @@
-﻿<Window x:Class="PhotoViewerDemo.PhotoViewer"
+﻿<Window x:Class="ABridge.Photos.PhotoViewer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PhotoViewerDemo"
+        xmlns:local="clr-namespace:ABridge.Photos"
         mc:Ignorable="d"
         Loaded="WindowLoaded"
         Title="PhotoViewer" Height="300" Width="300">
@@ -13,8 +13,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="35" />
         </Grid.RowDefinitions>
 
         <!-- Blur drop shadow under photo -->
@@ -36,22 +36,20 @@
         </Border>
 
         <!-- Tools -->
-        <Border Grid.Column="0" Grid.Row="1" Padding="4">
-            <StackPanel Orientation="Horizontal">
-                <Label Name="ViewedCaption" HorizontalAlignment="Left" />
-                <Button Click="Crop" Content="Crop" />
-                <Button Click="Rotate" Content="Rotate" />
-                <Button Click="BlackAndWhite" Content="BlackAndWhite" />
-            </StackPanel>
-        </Border>
-        <Grid Grid.Row="2" >
+        <Grid Grid.Row="1">
+            <Label Name="ViewedCaption" HorizontalAlignment="Left" />
+        </Grid>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="185" MaxWidth="300" Width="*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="_TagText"  Grid.Column="0" Margin="3" HorizontalAlignment="Stretch"/>
-            <Button x:Name="_Edit" Content="Edit" Grid.Column="1" Margin="3" HorizontalAlignment="Stretch" Click="_Edit_Click"/>
-
+            <Grid Grid.Column="0">
+                <TextBox x:Name="_TagText" Margin="3" HorizontalAlignment="Stretch"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Button x:Name="_Edit" Content="Edit" Margin="3" HorizontalAlignment="Stretch" Click="_Edit_Click"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

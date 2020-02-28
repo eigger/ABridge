@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace PhotoViewerDemo
+namespace ABridge.Photos
 {
     /// <summary>
     ///     Interaction logic for PhotoViewer.xaml
@@ -29,7 +29,7 @@ namespace PhotoViewerDemo
             StringBuilder tags = new StringBuilder();
             try
             {
-                foreach(string tag in SelectedPhoto.Metadata.tags)
+                foreach(string tag in SelectedPhoto.Metadata.GetTags())
                 {
                     if (tags.Length > 0)
                     {
@@ -43,39 +43,41 @@ namespace PhotoViewerDemo
             {
 
             }
+            this.SizeToContent = SizeToContent.Width;
+            //Width = SelectedPhoto.Image.PixelWidth;
+            //Height = SelectedPhoto.Image.PixelHeight;
             _TagText.Text = tags.ToString();
         }
 
         private void Rotate(object sender, RoutedEventArgs e)
         {
-            BitmapSource img = SelectedPhoto.Image;
+            //BitmapSource img = SelectedPhoto.Image;
 
-            var cache = new CachedBitmap(img, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-            SelectedPhoto.Image = BitmapFrame.Create(new TransformedBitmap(cache, new RotateTransform(90.0)));
+            //var cache = new CachedBitmap(img, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            //SelectedPhoto.Image = BitmapFrame.Create(new TransformedBitmap(cache, new RotateTransform(90.0)));
 
-            ViewedPhoto.Source = SelectedPhoto.Image;
+            //ViewedPhoto.Source = SelectedPhoto.Image;
         }
 
         private void Crop(object sender, RoutedEventArgs e)
         {
-            BitmapSource img = SelectedPhoto.Image;
+            //BitmapSource img = SelectedPhoto.Image;
 
-            var halfWidth = img.PixelWidth/2;
-            var halfHeight = img.PixelHeight/2;
-            SelectedPhoto.Image =
-                BitmapFrame.Create(new CroppedBitmap(img,
-                    new Int32Rect((halfWidth - (halfWidth/2)), (halfHeight - (halfHeight/2)), halfWidth, halfHeight)));
+            //var halfWidth = img.PixelWidth/2;
+            //var halfHeight = img.PixelHeight/2;
+            //SelectedPhoto.Image =
+            //    BitmapFrame.Create(new CroppedBitmap(img,
+            //        new Int32Rect((halfWidth - (halfWidth/2)), (halfHeight - (halfHeight/2)), halfWidth, halfHeight)));
 
-            ViewedPhoto.Source = SelectedPhoto.Image;
+            //ViewedPhoto.Source = SelectedPhoto.Image;
         }
 
         private void BlackAndWhite(object sender, RoutedEventArgs e)
         {
-            BitmapSource img = SelectedPhoto.Image;
-            SelectedPhoto.Image =
-                BitmapFrame.Create(new FormatConvertedBitmap(img, PixelFormats.Gray8, BitmapPalettes.Gray256, 1.0));
+            //BitmapSource img = SelectedPhoto.Image;
+            //SelectedPhoto.Image = BitmapFrame.Create(new FormatConvertedBitmap(img, PixelFormats.Gray8, BitmapPalettes.Gray256, 1.0));
 
-            ViewedPhoto.Source = SelectedPhoto.Image;
+            //ViewedPhoto.Source = SelectedPhoto.Image;
         }
 
         private void _Edit_Click(object sender, RoutedEventArgs e)
@@ -85,7 +87,7 @@ namespace PhotoViewerDemo
                 string phrase = _TagText.Text;
                 string[] tags = phrase.Split(';');
                 if (tags.Length == 0) return;
-                SelectedPhoto.Metadata.tags = tags;
+                SelectedPhoto.Metadata.SetTags(tags);
             }
             catch (Exception ex)
             {
