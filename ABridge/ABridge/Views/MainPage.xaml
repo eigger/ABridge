@@ -207,7 +207,7 @@
             </Grid.RowDefinitions>
             <Slider Grid.Row="0" 
                     Name="ZoomSlider"
-                        Margin="10,0,0,0"
+                        Margin="10,0,10,0"
                         Orientation="Horizontal"
                         Minimum="80"
                         Maximum="320"
