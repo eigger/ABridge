@@ -54,6 +54,11 @@ namespace ABridge.Views
         private void DeleteTag(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = (TreeViewItem)_TreeView.SelectedItem;
+            if (item == null)
+            {
+                MessageBox.Show("선택된 태그가 없습니다.");
+                return;
+            }
             if (DeleteTag((String)item.Tag) == true)
             {
                 _tagList.Remove((String)item.Tag);
@@ -157,7 +162,7 @@ namespace ABridge.Views
             {
                 if ((String)tv.Tag == tag)
                 {
-                    _TreeView.Items.Remove(tv.Tag);
+                    _TreeView.Items.Remove(tv);
                     return true;
                 }
             }
@@ -181,9 +186,7 @@ namespace ABridge.Views
 
         private void _TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Photos.Clear();
-            TreeViewItem item = (TreeViewItem)_TreeView.SelectedItem;
-            Photos.UpdatePhotosWithTag(_OpenText.Text, (String)item.Tag);
+
         }
 
         private void _TreeView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

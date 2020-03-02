@@ -88,6 +88,7 @@ namespace ABridge.Photos
                 string[] tags = phrase.Split(';');
                 if (tags.Length == 0) return;
                 SelectedPhoto.Metadata.SetTags(tags);
+                MessageBox.Show("수정");
             }
             catch (Exception ex)
             {

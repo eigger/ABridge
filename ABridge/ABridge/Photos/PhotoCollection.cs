@@ -48,7 +48,7 @@ namespace ABridge.Photos
             return files;
         }
 
-        public void UpdatePhotosWithTag(string path, string tag = "")
+        public async void UpdatePhotosWithTag(string path, string tag = "")
         {
             try
             {
